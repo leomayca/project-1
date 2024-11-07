@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { TextInput } from ".";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from '@testing-library/react';
+import { TextInput } from '.';
+import userEvent from '@testing-library/user-event';
 
 describe('<TextInput />', () => {
   it('should have a value of searchValue', () => {
@@ -11,23 +11,22 @@ describe('<TextInput />', () => {
     expect(input.value).toBe('testing');
   });
 
-  it('should call handleChange function on each key pressed', () => {
+  it('should call handleChange function on each key pressed', async () => {
     const fn = jest.fn();
-    render(<TextInput handleChange={fn} />);
+    render(<TextInput handleChange={fn} searchValue={'value'} />);
 
     const input = screen.getByPlaceholderText(/type your search/i);
     const value = 'the value';
 
-    userEvent.type(input, value);
+    await userEvent.type(input, value);
 
-    expect(input.value).toBe(value);
+    expect(input.value).toBe('value');
     expect(fn).toHaveBeenCalledTimes(value.length);
   });
 
   it('should match snapshot', () => {
     const fn = jest.fn();
-    const { container } = render(<TextInput handleChange={fn} />);
-    // eslint-disable-next-line testing-library/no-node-access
+    const { container } = render(<TextInput handleChange={fn} searchValue={''} />);
     expect(container.firstChild).toMatchSnapshot();
   });
 });

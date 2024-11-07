@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
-import { Button } from ".";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from '@testing-library/react';
+import { Button } from '.';
+import userEvent from '@testing-library/user-event';
 
 describe('<Button />', () => {
   it('should render the button with the text "Load more"', () => {
-    render(<Button text="Load more" />);
+    const fn = jest.fn();
+    render(<Button text="Load more" onClick={fn} />);
 
     expect.assertions(1);
 
@@ -12,13 +13,13 @@ describe('<Button />', () => {
     expect(button).toBeInTheDocument();
   });
 
-  it('should call function on button click', () => {
+  it('should call function on button click', async () => {
     const fn = jest.fn();
     render(<Button text="Load more" onClick={fn} />);
 
     const button = screen.getByRole('button', { name: /load more/i });
 
-    userEvent.click(button);
+    await userEvent.click(button);
 
     expect(fn).toHaveBeenCalledTimes(1);
   });
@@ -40,7 +41,6 @@ describe('<Button />', () => {
   it('should match snapshot', () => {
     const fn = jest.fn();
     const { container } = render(<Button text="Load more" disabled={false} onClick={fn} />);
-    // eslint-disable-next-line testing-library/no-node-access
     expect(container.firstChild).toMatchSnapshot();
   });
 });
